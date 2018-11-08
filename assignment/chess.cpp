@@ -25,13 +25,13 @@ bool is_piece (struct ChessPiece pc, enum PieceColor color, enum PieceType type)
 void init_chess_board (ChessBoard chess_board) {
   for (size_t y = 0; y < 8; y++) {
     for (size_t x = 0; x < 8; x++) {
-      chess_board[y][x].is_occupied=false;
+      chess_board[y][x].is_occupied = false;
     }
   }
 }
 
 bool add_piece (ChessBoard chess_board, File file, Rank rank, struct ChessPiece piece) {
-   if (!is_square_occupied(chess_board, file, rank - 1) && is_square_ok(file, rank - 1)) {
+   if (!is_square_occupied(chess_board, file, rank) && is_square_ok(file, rank - 1)) {
      chess_board[rank - 1][file - 'a'].is_occupied = true;
      chess_board[rank - 1][file - 'a'].piece = piece;
      return true;
@@ -39,38 +39,11 @@ bool add_piece (ChessBoard chess_board, File file, Rank rank, struct ChessPiece 
   return false;
 }
 
-void 	setup_chess_board (ChessBoard chess_board)
-{
-  // struct ChessPiece piece;
-  // piece.color = White;
-  // piece.type = Rook;
-  // add_piece(chess_board, 'a', 1, piece);
-  // add_piece(chess_board, 'h', 1, piece);
-  // piece.type = Knight;
-  // add_piece(chess_board, 'b', 1, piece);
-  // add_piece(chess_board, 'g', 1, piece);
-  // piece.type = Bishop;
-  // add_piece(chess_board, 'c', 1, piece);
-  // add_piece(chess_board, 'f', 1, piece);
-  // piece.type = Queen;
-  // add_piece(chess_board, 'd', 1, piece);
-  // piece.type = King;
-  // add_piece(chess_board, 'e', 1, piece);
-  //
-  // piece.color = Black;
-  // piece.type = Rook;
-  // add_piece(chess_board, 'a', 8, piece);
-  // add_piece(chess_board, 'h', 8, piece);
-  // piece.type = Knight;
-  // add_piece(chess_board, 'b', 8, piece);
-  // add_piece(chess_board, 'g', 8, piece);
-  // piece.type = Bishop;
-  // add_piece(chess_board, 'c', 8, piece);
-  // add_piece(chess_board, 'f', 8, piece);
-  // piece.type = Queen;
-  // add_piece(chess_board, 'd', 8, piece);
-  // piece.type = King;
-  // add_piece(chess_board, 'e', 8, piece);
+void 	setup_chess_board (ChessBoard chess_board) {
+  for (char c = 'a'; c <= 'h'; c++) {
+    add_piece(chess_board, c, 2, {White, Pawn});
+    add_piece(chess_board, c, 7, {Black, Pawn});
+  }
 
   add_piece(chess_board, 'a', 1, {White, Rook});
   add_piece(chess_board, 'h', 1, {White, Rook});
@@ -104,7 +77,7 @@ bool is_square_occupied (ChessBoard chess_board, File file, Rank rank) {
 
 struct ChessPiece get_piece (ChessBoard chess_board, File file, Rank rank)
 {
-  if (is_square_ok(file, rank) && is_square_occupied(chess_board, file, rank)) {
+  if (is_square_ok(file, rank - 1) && is_square_occupied(chess_board, file, rank)) {
     return chess_board[rank - 1][file - 'a'].piece;
   }
   struct ChessPiece p;
