@@ -169,6 +169,14 @@ bool 	squares_share_queens_move (File s1_f, Rank s1_r, File s2_f, Rank s2_r)
 
 bool 	squares_share_kings_move (File s1_f, Rank s1_r, File s2_f, Rank s2_r)
 {
-  return (s1_f + 1 == s2_f && s1_r == s2_r) || (s1_f - 1 == s2_f && s1_r == s2_r) ||
-         (s1_f == s2_f && s1_r + 1 == s2_r) || (s1_f == s2_f && s1_r - 1 == s2_r);
+  bool move_up = s1_f == s2_f && s1_r + 1 == s2_r;
+  bool move_down = s1_f == s2_f && s1_r - 1 == s2_r;
+  bool move_left = s1_f - 1 == s2_f && s1_r == s2_r;
+  bool move_right = s1_f + 1 == s2_f && s1_r == s2_r;
+  bool move_right_down = s1_f + 1 == s2_f && s1_r - 1 == s2_r;
+  bool move_right_up = s1_f + 1 == s2_f && s1_r + 1 == s2_r;
+  bool move_left_down = s1_f - 1 == s2_f && s1_r - 1 == s2_r;
+  bool move_left_up = s1_f - 1 == s2_f && s1_r + 1 == s2_r;
+  return move_up || move_down || move_left || move_right
+      || move_right_down || move_right_up || move_left_up || move_left_down;
 }
