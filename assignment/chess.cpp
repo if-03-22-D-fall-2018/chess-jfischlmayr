@@ -90,6 +90,11 @@ struct ChessPiece get_piece (ChessBoard chess_board, File file, Rank rank)
 
 bool 	remove_piece (ChessBoard chess_board, File file, Rank rank)
 {
+  if (is_square_occupied(chess_board, file, rank) && is_square_ok(file, rank)) {
+    add_piece(chess_board, file, rank, {});
+    chess_board[rank - 1][file - 'a'].is_occupied = false;
+    return true;
+  }
   return false;
 }
 
