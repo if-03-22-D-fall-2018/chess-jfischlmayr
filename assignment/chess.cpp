@@ -40,6 +40,7 @@ bool add_piece (ChessBoard chess_board, File file, Rank rank, struct ChessPiece 
 }
 
 void 	setup_chess_board (ChessBoard chess_board) {
+  init_chess_board(chess_board);
   for (char c = 'a'; c <= 'h'; c++) {
     add_piece(chess_board, c, 2, {White, Pawn});
     add_piece(chess_board, c, 7, {Black, Pawn});
