@@ -76,8 +76,7 @@ bool is_square_occupied (ChessBoard chess_board, File file, Rank rank) {
   return chess_board[rank - 1][file - 'a'].is_occupied;
 }
 
-struct ChessPiece get_piece (ChessBoard chess_board, File file, Rank rank)
-{
+struct ChessPiece get_piece (ChessBoard chess_board, File file, Rank rank) {
   if (is_square_ok(file, rank - 1) && is_square_occupied(chess_board, file, rank)) {
     return chess_board[rank - 1][file - 'a'].piece;
   }
@@ -88,9 +87,8 @@ struct ChessPiece get_piece (ChessBoard chess_board, File file, Rank rank)
 
 
 
-bool 	remove_piece (ChessBoard chess_board, File file, Rank rank)
-{
-  if (is_square_occupied(chess_board, file, rank) && is_square_ok(file, rank)) {
+bool 	remove_piece (ChessBoard chess_board, File file, Rank rank) {
+  if (is_square_occupied(chess_board, file, rank) && is_square_ok(file, rank - 1)) {
     add_piece(chess_board, file, rank, {});
     chess_board[rank - 1][file - 'a'].is_occupied = false;
     return true;
@@ -98,27 +96,32 @@ bool 	remove_piece (ChessBoard chess_board, File file, Rank rank)
   return false;
 }
 
-bool 	squares_share_file (File s1_f, Rank s1_r, File s2_f, Rank s2_r)
-{
+bool 	squares_share_file (File s1_f, Rank s1_r, File s2_f, Rank s2_r) {
+  return s1_f == s2_f && is_square_ok(s1_f, s1_r - 1) && is_square_ok(s2_f, s2_r - 1);
+}
+
+
+bool 	squares_share_rank (File s1_f, Rank s1_r, File s2_f, Rank s2_r) {
+  return s1_r == s2_r && is_square_ok(s1_f, s1_r - 1) && is_square_ok(s2_f, s2_r - 1);
+}
+
+
+bool 	squares_share_diagonal (File s1_f, Rank s1_r, File s2_f, Rank s2_r) {
+  if (is_square_ok(s1_f, s1_r - 1) && is_square_ok(s2_f, s2_r - 1)) {
+    for (int i = 1; i < 9; i++) {
+      if (!i < 1 && (s1_r - i == s2_r || s1_r + i == s2_r) &&
+          (s1_f - i - 'a' == s2_f - 'a' || s1_f - 'a' + i == s2_f - 'a')) {
+        return true;
+      }
+    }
+  }
   return false;
 }
 
 
-bool 	squares_share_rank (File s1_f, Rank s1_r, File s2_f, Rank s2_r)
-{
-  return false;
-}
-
-
-bool 	squares_share_diagonal (File s1_f, Rank s1_r, File s2_f, Rank s2_r)
-{
-  return false;
-}
-
-
-bool 	squares_share_knights_move (File s1_f, Rank s1_r, File s2_f, Rank s2_r)
-{
-  return false;
+bool 	squares_share_knights_move (File s1_f, Rank s1_r, File s2_f, Rank s2_r) {
+  return (s1_r - 2 == s2_r || s1_r + 2 == s2_r) &&
+      (s1_f - 1 - 'a' == s2_f - 'a' || s1_f + 1 - 'a' == s2_f - 'a');
 }
 
 
