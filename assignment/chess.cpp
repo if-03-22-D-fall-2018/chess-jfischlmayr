@@ -133,16 +133,26 @@ bool 	squares_share_pawns_move (enum PieceColor color, enum MoveType move, File 
   if (color == White) {
     if (move == NormalMove) {
       if (s1_r == 1) return false;
-      return (s1_f == s2_f && s1_r + 1 == s2_r) || (s1_f == s2_f && s1_r + 2 == s2_r);
+      bool is_at_starting_line = s1_r == 2;
+      bool normal_move = (s1_f == s2_f && s1_r + 1 == s2_r);
+      if (is_at_starting_line) {
+        return normal_move || (s1_f == s2_f && s1_r + 2 == s2_r);
+      }
+      return normal_move;
     }
     else {
-      return ((s1_f - 1 == s2_f || s1_f + 1 == s2_f) && s1_r + 1 == s2_r) || ((s1_f + 1 == s2_f || s1_f - 1 == s2_f) && s1_r - 1 == s2_r);
+      return (s1_f + 1 == s2_f || s1_f - 1 == s2_f ) && s1_r + 1 == s2_r;
     }
   }
   else {
     if (move == NormalMove) {
-      if (s2_r == 1) return false;
-      return (s1_f == s2_f && s1_r - 1 == s2_r) || (s1_f == s2_f && s1_r - 2 == s2_r);
+      if (s2_r == 8) return false;
+      bool is_at_starting_line = s2_r == 7;
+      bool normal_move = (s1_f == s2_f && s1_r - 1 == s2_r);
+      if (is_at_starting_line) {
+        return normal_move || (s1_f == s2_f && s1_r - 2 == s2_r);
+      }
+      return normal_move;
     }
     else {
       return (s1_f == s2_f && s1_r - 1 == s2_r) || ((s1_f + 1 == s2_f || s1_f - 1 == s2_f) && s1_r - 1 == s2_r);
@@ -153,7 +163,7 @@ bool 	squares_share_pawns_move (enum PieceColor color, enum MoveType move, File 
 
 bool 	squares_share_queens_move (File s1_f, Rank s1_r, File s2_f, Rank s2_r)
 {
-  return false;
+  return squares_share_diagonal(s1_f, s1_r, s2_f, s2_r) || s1_f == s2_f || s1_r == s2_r;
 }
 
 
