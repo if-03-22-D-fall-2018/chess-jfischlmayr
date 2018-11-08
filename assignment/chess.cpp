@@ -109,7 +109,8 @@ bool 	squares_share_rank (File s1_f, Rank s1_r, File s2_f, Rank s2_r) {
 bool 	squares_share_diagonal (File s1_f, Rank s1_r, File s2_f, Rank s2_r) {
   if (is_square_ok(s1_f, s1_r - 1) && is_square_ok(s2_f, s2_r - 1)) {
     for (int i = 1; i < 9; i++) {
-      if (!i < 1 && (s1_r - i == s2_r || s1_r + i == s2_r) &&
+      bool is_lower_than_one = i < 1;
+      if (!is_lower_than_one && (s1_r - i == s2_r || s1_r + i == s2_r) &&
           (s1_f - i - 'a' == s2_f - 'a' || s1_f - 'a' + i == s2_f - 'a')) {
         return true;
       }
@@ -120,14 +121,33 @@ bool 	squares_share_diagonal (File s1_f, Rank s1_r, File s2_f, Rank s2_r) {
 
 
 bool 	squares_share_knights_move (File s1_f, Rank s1_r, File s2_f, Rank s2_r) {
-  return (s1_r - 2 == s2_r || s1_r + 2 == s2_r) &&
-      (s1_f - 1 - 'a' == s2_f - 'a' || s1_f + 1 - 'a' == s2_f - 'a');
+  return ((s1_r - 2 == s2_r || s1_r + 2 == s2_r) &&
+         (s1_f - 1 - 'a' == s2_f - 'a' || s1_f + 1 - 'a' == s2_f - 'a')) ||
+         ((s1_r - 1 == s2_r || s1_r + 1 == s2_r) &&
+         (s1_f - 2 - 'a' == s2_f - 'a' || s1_f + 2 - 'a' == s2_f - 'a'));
 }
 
 
 bool 	squares_share_pawns_move (enum PieceColor color, enum MoveType move, File s1_f, Rank s1_r, File s2_f, Rank s2_r)
 {
-  return false;
+  if (color == White) {
+    if (move == NormalMove) {
+      if (s1_r == 1) return false;
+      return (s1_f == s2_f && s1_r + 1 == s2_r) || (s1_f == s2_f && s1_r + 2 == s2_r);
+    }
+    else {
+      return ((s1_f - 1 == s2_f || s1_f + 1 == s2_f) && s1_r + 1 == s2_r) || ((s1_f + 1 == s2_f || s1_f - 1 == s2_f) && s1_r - 1 == s2_r);
+    }
+  }
+  else {
+    if (move == NormalMove) {
+      if (s2_r == 1) return false;
+      return (s1_f == s2_f && s1_r - 1 == s2_r) || (s1_f == s2_f && s1_r - 2 == s2_r);
+    }
+    else {
+      return (s1_f == s2_f && s1_r - 1 == s2_r) || ((s1_f + 1 == s2_f || s1_f - 1 == s2_f) && s1_r - 1 == s2_r);
+    }
+  }
 }
 
 
@@ -139,5 +159,6 @@ bool 	squares_share_queens_move (File s1_f, Rank s1_r, File s2_f, Rank s2_r)
 
 bool 	squares_share_kings_move (File s1_f, Rank s1_r, File s2_f, Rank s2_r)
 {
-  return false;
+  return (s1_f + 1 == s2_f && s1_r == s2_r) || (s1_f - 1 == s2_f && s1_r == s2_r) ||
+         (s1_f == s2_f + 1 && s1_r == s2_r) || (s1_f == s2_f && s1_r == s2_r - 1);
 }
